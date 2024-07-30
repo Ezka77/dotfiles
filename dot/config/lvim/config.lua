@@ -8,7 +8,7 @@ lvim.plugins = {
     "catppuccin/nvim",
     name = "catppuccin"
   },
-  { "ilyachur/cmake4vim" },
+  { "cmake-tools.nvim" },
   {
     "windwp/nvim-spectre",
     event = "BufRead",
@@ -64,11 +64,9 @@ lvim.plugins = {
     cmd = "TroubleToggle",
   },
   {
-    "ggandor/leap.nvim",
-    dependencies = { 'tpope/vim-repeat' },
-    config = function()
-      require('leap').add_default_mappings()
-    end
+    "monaqa/dial.nvim",
+    event = "BufRead",
+    keys = { "<C-a>", { "<C-x>", mode = "n" } },
   },
   {
     "kevinhwang91/nvim-bqf",
@@ -96,44 +94,34 @@ lvim.plugins = {
       })
     end,
   },
-  {
-    "ray-x/lsp_signature.nvim",
-    event = "BufRead",
-    config = function() require "lsp_signature".on_attach() end,
-  },
+  -- {
+  --   "ray-x/lsp_signature.nvim",
+  --   event = "BufRead",
+  --   config = function() require "lsp_signature".on_attach() end,
+  -- },
   { "nvim-telescope/telescope-live-grep-args.nvim" },
-  -- {
-  --   "AckslD/nvim-neoclip.lua",
-  --   dependencies = {
-  --     -- you'll need at least one of these
-  --     { 'nvim-telescope/telescope.nvim' },
-  --     -- {'ibhagwan/fzf-lua'},
-  --   },
-  --   config = function()
-  --     require('neoclip').setup()
-  --   end,
-  -- },
-  -- {
-  --   "kylechui/nvim-surround",
-  --   version = "*", -- Use for stability; omit to use `main` branch for the latest features
-  --   event = "VeryLazy",
-  --   config = function()
-  --     require("nvim-surround").setup({
-  --       -- Configuration here, or leave empty to use defaults
-  --     })
-  --   end
-  -- },
   {
-    "weilbith/nvim-code-action-menu",
+    "aznhe21/actions-preview.nvim",
+    config = function()
+      require("actions-preview").setup {
+        telescope = vim.tbl_extend(
+          "force",
+          -- telescope theme: https://github.com/nvim-telescope/telescope.nvim#themes
+          require("telescope.themes").get_ivy(),
+          -- a table for customizing content
+          {
+            -- a function to make a table containing the values to be displayed.
+            -- fun(action: Action): { title: string, client_name: string|nil }
+            make_value = nil,
+
+            -- a function to make a function to be used in `display` of a entry.
+            -- see also `:h telescope.make_entry` and `:h telescope.pickers.entry_display`.
+            -- fun(values: { index: integer, action: Action, title: string, client_name: string }[]): function
+            make_make_display = nil,
+          }
+        ) }
+    end
   },
-  -- {
-  --   "f-person/git-blame.nvim",
-  --   config = function()
-  --     require('gitblame').setup {
-  --       enabled = false,
-  --     }
-  --   end
-  -- },
   {
     'rmagatti/auto-session',
     config = function()
@@ -158,11 +146,6 @@ lvim.plugins = {
       })
     end
   },
-  -- {
-  --   "ecthelionvi/NeoComposer.nvim",
-  --   dependencies = { "kkharji/sqlite.lua" },
-  --   opts = {}
-  -- },
   {
     -- ctags is nice & simple or maybe use stevearc/aerial.nvim
     "fcying/telescope-ctags-outline.nvim",
@@ -205,7 +188,69 @@ lvim.plugins = {
     keys = {
       { "<leader>uu", "<cmd>UndotreeToggle<cr>", desc = "Toggle Undotree" },
     },
-  }
+  },
+  {
+    'norcalli/nvim-colorizer.lua',
+    config = function()
+      require('colorizer').setup() --{ '*'; '!' }
+    end,
+  },
+  {
+    "folke/noice.nvim",
+    event = "VeryLazy",
+    opts = {
+      -- add any options here
+    },
+    dependencies = {
+      -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+      "MunifTanjim/nui.nvim",
+      -- OPTIONAL:
+      --   `nvim-notify` is only needed, if you want to use the notification view.
+      --   If not available, we use `mini` as the fallback
+      "rcarriga/nvim-notify",
+    },
+    config = function()
+      require("noice").setup({
+        lsp = {
+          -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
+          override = {
+            ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+            ["vim.lsp.util.stylize_markdown"] = true,
+            ["cmp.entry.get_documentation"] = true, -- requires hrsh7th/nvim-cmp
+          },
+        },
+        -- you can enable a preset for easier configuration
+        presets = {
+          bottom_search = true,         -- use a classic bottom cmdline for search
+          command_palette = true,       -- position the cmdline and popupmenu together
+          long_message_to_split = true, -- long messages will be sent to a split
+          inc_rename = false,           -- enables an input dialog for inc-rename.nvim
+          lsp_doc_border = false,       -- add a border to hover docs and signature help
+        },
+        routes = {
+          {
+            filter = {
+              event = "msg_show",
+              kind = "",
+              find = "written",
+            },
+            opts = { skip = true },
+          },
+        }
+      })
+    end
+  },
+  {
+    "ibhagwan/fzf-lua",
+    -- optional for icon support
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    config = function()
+      -- calling `setup` is optional for customization
+      require("fzf-lua").setup({})
+    end
+  },
+  -- it builds but never find how to instruct fzf-lua to use it !
+  -- { "junegunn/fzf", build = "./install --bin" }
 }
 
 -- enable plugins
@@ -218,6 +263,7 @@ lvim.builtin.telescope.on_config_done = function(telescope)
   -- telescope.load_extension "neoclip"
   telescope.load_extension "session-lens"
   telescope.load_extension "ctags_outline"
+  telescope.load_extension "noice"
 end
 
 -- format on save
@@ -255,20 +301,12 @@ lvim.builtin.which_key.mappings["t"] = {
   l = { "<cmd>TroubleToggle loclist<cr>", "loclist" },
   r = { "<cmd>TroubleToggle lsp_references<cr>", "references" },
 }
--- lvim.builtin.which_key.mappings["S"] = {
---   name = "Session",
---   c = { "<cmd>lua require('persistence').load()<cr>", "Restore last session for current dir" },
---   l = { "<cmd>lua require('persistence').load({ last = true })<cr>", "Restore last session" },
---   Q = { "<cmd>lua require('persistence').stop()<cr>", "Quit without saving session" },
--- }
+
 lvim.builtin.which_key.mappings["sg"] = {
   "<cmd>lua require'telescope'.extensions.live_grep_args.live_grep_args()<CR>", "live grep args"
 }
 lvim.builtin.which_key.mappings["lz"] = {
-  "<cmd>CodeActionMenu<CR>", "Code Action Menu"
-}
-lvim.builtin.which_key.mappings.g["t"] = {
-  "<cmd>GitBlameToggle<CR>", "Git Blame Toggle"
+  "<cmd>lua require('actions-preview').code_actions()<CR>", "Code Action Menu"
 }
 lvim.builtin.which_key.mappings["sj"] = {
   "<cmd>lua require('telescope.builtin').current_buffer_fuzzy_find({case_mode='ignore_case'})<CR>", "buffer text search"
@@ -285,15 +323,9 @@ lvim.builtin.which_key.mappings["e"] = { "<cmd>lua MiniFiles.open(vim.api.nvim_b
 
 -- lvim.builtin.bufferline.active = false
 
-lvim.builtin.which_key.mappings["="] = { "<cmd>LvimToggleFormatOnSave<CR>", "Toggle format on save" }
 -- some nice colors - ivy as telescope display
 lvim.colorscheme = "catppuccin-mocha"
 lvim.builtin.telescope.theme = "ivy"
-
--- call command to build rapidash site-editor
--- vim.api.nvim_create_user_command("Build",
---   "wall | 1TermExec cmd=\"ninja site-editor && site-editor --dev --log debug\" dir=/home/rosuser/build size=10 direction=horizontal go_back=1",
---   {})
 
 -- line number relative to current position
 vim.opt.relativenumber = true
@@ -303,6 +335,29 @@ vim.lsp.set_log_level('off')
 
 vim.diagnostic.config({ virtual_text = true })
 lvim.builtin.treesitter.highlight.enable = true
+
+lvim.builtin.treesitter.ensure_installed = { "cpp", "c", "cmake", "dockerfile", "yaml", "markdown", "json", "toml", "rst",
+  "comment" }
+lvim.builtin.mason.ensure_installed = { "cmakelang", "cmakelint", "hadolint" }
+
+-- require c++ & clangd
+-- lvim.builtin.which_key.mappings["lo"] = { "<cmd>ClangdToggleInlayHints<cr>", "Toggle Inlays Hints" }
+-- lvim.builtin.which_key.mappings["lh"] = { "<cmd>ClangdSwitchSourceHeader<cr>", "Switch Source/Header" }
+
+-- add c++ snips
+require("luasnip").filetype_extend("cpp", { "cppdoc" })
+
+-- lvim.transparent_window = true
+-- require("notify").setup({ background_colour = "#11111B" })
+
+vim.keymap.set({ "i" }, "<C-x><C-f>",
+  function()
+    require("fzf-lua").complete_file({
+      cmd = "rg --files",
+      winopts = { preview = { hidden = "nohidden" } }
+    })
+  end, { silent = true, desc = "Fuzzy complete file" })
+
 -- load dap settings
 require("user.lsp-settings")
 require("user.dap-settings")

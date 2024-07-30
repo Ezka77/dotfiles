@@ -1,5 +1,6 @@
 import = [
   # "~/.config/alacritty/catppuccin-latte.toml"
+  # "~/.config/alacritty/catppuccin-macchiato.toml"
   "~/.config/alacritty/catppuccin-mocha.toml"
 ]
 
@@ -11,8 +12,9 @@ size = 12.0
 
 [font.normal]
 # family = "HackNerdFont"
-family = "JetBrainsMonoNerdFont"
+# family = "JetBrainsMonoNerdFont"
 # family = "GoMonoNerdFontMono"
+family = "FiraCodeNerdFont"
 
 [[keyboard.bindings]]
 action = "SpawnNewInstance"
@@ -32,4 +34,6 @@ args = ["new", "-As", "Theo"]
 program = "tmux"
 
 [window]
-decorations = "full"
+decorations = "None"
+startup_mode = "Maximized"
+ opacity = 0.98

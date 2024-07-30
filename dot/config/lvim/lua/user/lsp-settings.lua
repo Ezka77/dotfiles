@@ -1,5 +1,5 @@
 -- auto install treesitter parsers
-lvim.builtin.treesitter.ensure_installed = { "cpp", "c" }
+-- lvim.builtin.treesitter.ensure_installed = { "cpp", "c" }
 
 -- Additional Plugins
 table.insert(lvim.plugins, {
@@ -30,10 +30,11 @@ local clangd_flags = {
   -- "--query-driver=<list-of-white-listed-complers>"
 }
 
-local provider = "clangd"
-
 local custom_on_attach = function(client, bufnr)
   require("lvim.lsp").common_on_attach(client, bufnr)
+
+  -- require("clangd_extensions.inlay_hints").setup_autocmd()
+  -- require("clangd_extensions.inlay_hints").set_inlay_hints()
 
   local opts = { noremap = true, silent = true, buffer = bufnr }
   vim.keymap.set("n", "<leader>lh", "<cmd>ClangdSwitchSourceHeader<cr>", opts)
@@ -41,9 +42,9 @@ local custom_on_attach = function(client, bufnr)
   vim.keymap.set("n", "<leader>lH", "<cmd>ClangdTypeHierarchy<cr>", opts)
   vim.keymap.set("n", "<leader>lt", "<cmd>ClangdSymbolInfo<cr>", opts)
   vim.keymap.set("n", "<leader>lm", "<cmd>ClangdMemoryUsage<cr>", opts)
+  -- vim.keymap.set("n", "<leader>ln", "<cmd>ClangdToggleInlayHints<cr>", opts)
 
-  require("clangd_extensions.inlay_hints").setup_autocmd()
-  require("clangd_extensions.inlay_hints").set_inlay_hints()
+  -- require "lsp_signature".on_attach()
 end
 
 local status_ok, project_config = pcall(require, "rhel.clangd_wrl")
@@ -54,16 +55,9 @@ end
 local custom_on_init = function(client, bufnr)
   require("lvim.lsp").common_on_init(client, bufnr)
   require("clangd_extensions.config").setup {}
-  -- require("clangd_extensions.ast").init()
-  vim.cmd [[
-  command ClangdToggleInlayHints lua require('clangd_extensions.inlay_hints').toggle_inlay_hints()
-  command -range ClangdAST lua require('clangd_extensions.ast').display_ast(<line1>, <line2>)
-  command ClangdTypeHierarchy lua require('clangd_extensions.type_hierarchy').show_hierarchy()
-  command ClangdSymbolInfo lua require('clangd_extensions.symbol_info').show_symbol_info()
-  command -nargs=? -complete=customlist,s:memuse_compl ClangdMemoryUsage lua require('clangd_extensions.memory_usage').show_memory_usage('<args>' == 'expand_preamble')
-  ]]
 end
 
+local provider = "clangd"
 local opts = {
   cmd = { provider, unpack(clangd_flags) },
   on_attach = custom_on_attach,
