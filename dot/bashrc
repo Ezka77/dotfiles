@@ -47,7 +47,7 @@ CARGO_ENV="~/.cargo/env"
 # tell fzf to not map these command I'm using gf and gd in cmd mode
 FZF_CTRL_T_COMMAND=
 # FZF_ALT_C_COMMAND=
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+eval "$(fzf --bash)"
 bind -m vi-command -x '"gf": "fzf-file-widget"'
 bind -m vi-command '"gd": "\C-z\ec\C-z"'
 # Open in tmux popup if on tmux, otherwise use --height mode

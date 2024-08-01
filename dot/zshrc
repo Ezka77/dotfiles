@@ -120,16 +120,18 @@ fi
 
 
 # Set up fzf key bindings and fuzzy completion
-FZF_ALT_C_COMMAND=
-FZF_CTRL_T_COMMAND=
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-zle -N fzf-cd-widget
-zle -N fzf-file-widget
-# Define my bindings
-bindkey -M vicmd 'gf' fzf-file-widget
-bindkey -M vicmd 'gd' fzf-cd-widget
-# Open in tmux popup if on tmux, otherwise use --height mode
-FZF_DEFAULT_OPTS='--tmux center'
+if command -v fzf >&| /dev/null; then
+  FZF_ALT_C_COMMAND=
+  FZF_CTRL_T_COMMAND=
+  source <(fzf --zsh)
+  zle -N fzf-cd-widget
+  zle -N fzf-file-widget
+  # Define my bindings
+  bindkey -M vicmd 'gf' fzf-file-widget
+  bindkey -M vicmd 'gd' fzf-cd-widget
+  # Open in tmux popup if on tmux, otherwise use --height mode
+  FZF_DEFAULT_OPTS='--tmux center'
+fi
 
 # zprof
 
