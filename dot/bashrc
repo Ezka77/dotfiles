@@ -24,7 +24,7 @@ shopt -s checkwinsize
 #shopt -s globstar
 
 # fnm
-FNM_PATH="~/.local/share/fnm"
+FNM_PATH="${HOME}/.local/share/fnm"
 if [ -d "$FNM_PATH" ]; then
   export PATH="$FNM_PATH:$PATH"
   eval "`fnm env`"
@@ -41,7 +41,7 @@ if ! shopt -oq posix; then
   fi
 fi
 
-CARGO_ENV="~/.cargo/env"
+CARGO_ENV="${HOME}/.cargo/env"
 [ -f $CARGO_ENV ] && source $CARGO_ENV
 
 # tell fzf to not map these command I'm using gf and gd in cmd mode
@@ -49,7 +49,7 @@ FZF_CTRL_T_COMMAND=
 # FZF_ALT_C_COMMAND=
 eval "$(fzf --bash)"
 bind -m vi-command -x '"gf": "fzf-file-widget"'
-bind -m vi-command '"gd": "\C-z\ec\C-z"'
+bind -m vi-command    '"gd": "\C-z\ec\C-z"'
 # Open in tmux popup if on tmux, otherwise use --height mode
 FZF_DEFAULT_OPTS='--tmux center'
 
@@ -58,8 +58,11 @@ bind "set show-mode-in-prompt on"
 bind 'set vi-cmd-mode-string "\1\e[2 q\2"'
 bind 'set vi-ins-mode-string "\1\e[6 q\2"'
 
+# use Ninja as builder
+CMAKE_GENERATOR=Ninja
+
 # add my local bin directory
 export PATH=~/bin:~/.local/bin:/usr/local/bin:$PATH
+
 # vim mode
 set -o vi
-
