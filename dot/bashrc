@@ -1,7 +1,7 @@
 # If not running interactively, don't do anything
 case $- in
-    *i*) ;;
-      *) return;;
+*i*) ;;
+*) return ;;
 esac
 
 # don't put duplicate lines or lines starting with space in the history.
@@ -27,7 +27,7 @@ shopt -s checkwinsize
 FNM_PATH="${HOME}/.local/share/fnm"
 if [ -d "$FNM_PATH" ]; then
   export PATH="$FNM_PATH:$PATH"
-  eval "`fnm env`"
+  eval "$(fnm env)"
 fi
 
 # enable programmable completion features (you don't need to enable
@@ -41,17 +41,17 @@ if ! shopt -oq posix; then
   fi
 fi
 
-CARGO_ENV="${HOME}/.cargo/env"
-[ -f $CARGO_ENV ] && source $CARGO_ENV
+CARGO_ENV="$HOME/.cargo/env"
+[ -f "$CARGO_ENV" ] && source "$CARGO_ENV"
 
 # tell fzf to not map these command I'm using gf and gd in cmd mode
 FZF_CTRL_T_COMMAND=
 # FZF_ALT_C_COMMAND=
 eval "$(fzf --bash)"
 bind -m vi-command -x '"gf": "fzf-file-widget"'
-bind -m vi-command    '"gd": "\C-z\ec\C-z"'
+bind -m vi-command '"gd": "\C-z\ec\C-z"'
 # Open in tmux popup if on tmux, otherwise use --height mode
-FZF_DEFAULT_OPTS='--tmux center'
+export FZF_DEFAULT_OPTS='--tmux center'
 
 # toggle between block <-> line cursor in cmd or insertion mode
 bind "set show-mode-in-prompt on"
@@ -59,7 +59,7 @@ bind 'set vi-cmd-mode-string "\1\e[2 q\2"'
 bind 'set vi-ins-mode-string "\1\e[6 q\2"'
 
 # use Ninja as builder
-CMAKE_GENERATOR=Ninja
+export CMAKE_GENERATOR=Ninja
 
 # add my local bin directory
 export PATH=~/bin:~/.local/bin:/usr/local/bin:$PATH
