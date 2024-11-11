@@ -1,6 +1,15 @@
 # dotfiles
 
-## Tools used
+## Get this repo
+
+```bash
+git clone --recurse-submodules git@github.com:Ezka77/kickstart.nvim.git
+
+# useless but fool proof
+git submodule update --init --recursive
+```
+
+## Tools to install
 
 - fzf : [ttps://github.com/junegunn/fzf]
 - tpm : [https://github.com/tmux-plugins/tpm]
