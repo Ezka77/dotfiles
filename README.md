@@ -2,8 +2,8 @@
 
 ## Tools used
 
-- fzf : https://github.com/junegunn/fzf
-- tpm : https://github.com/tmux-plugins/tpm
-- fnm : https://github.com/Schniz/fnm
-- lunarvim : https://github.com/LunarVim/LunarVim
-- some nice fonts: https://www.nerdfonts.com/
+- fzf : [ttps://github.com/junegunn/fzf]
+- tpm : [https://github.com/tmux-plugins/tpm]
+- fnm : [https://github.com/Schniz/fnm]
+- kickstart.nvim: [git@github.com:nvim-lua/kickstart.nvim.git]
+- some nice fonts: [https://www.nerdfonts.com/]
