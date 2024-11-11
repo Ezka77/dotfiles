@@ -1,8 +1,3 @@
-import = [
-  # "~/.config/alacritty/catppuccin-latte.toml"
-  # "~/.config/alacritty/catppuccin-macchiato.toml"
-  "~/.config/alacritty/catppuccin-mocha.toml"
-]
 
 [env]
 TERM = "xterm-256color"
@@ -12,9 +7,9 @@ size = 12.0
 
 [font.normal]
 # family = "HackNerdFont"
-# family = "JetBrainsMonoNerdFont"
+family = "JetBrainsMonoNerdFont"
 # family = "GoMonoNerdFontMono"
-family = "FiraCodeNerdFont"
+#family = "FiraCodeNerdFont"
 
 [[keyboard.bindings]]
 action = "SpawnNewInstance"
@@ -29,11 +24,20 @@ mods = "Shift|Control"
 [scrolling]
 history = 10000
 
-[shell]
-args = ["new", "-As", "Theo"]
+[terminal.shell]
+args = ["new", "-As", "Ezka"]
 program = "tmux"
 
 [window]
 decorations = "None"
 startup_mode = "Maximized"
  opacity = 0.98
+
+[general]
+import = [
+  # "~/.config/alacritty/catppuccin-latte.toml"
+  # "~/.config/alacritty/catppuccin-macchiato.toml"
+  "~/.config/alacritty/catppuccin-mocha.toml"
+]
+
+[terminal]
