@@ -7,9 +7,9 @@ size = 12.0
 
 [font.normal]
 # family = "HackNerdFont"
-family = "JetBrainsMonoNerdFont"
+# family = "JetBrainsMonoNerdFont"
 # family = "GoMonoNerdFontMono"
-#family = "FiraCodeNerdFont"
+family = "FiraCodeNerdFont"
 
 [[keyboard.bindings]]
 action = "SpawnNewInstance"
